@@ -20,11 +20,8 @@ java.io.IOException: Failed to bind to localhost/127.0.0.1:8080
 	at com.google.appengine.tools.util.Parser$ParseResult.applyArgs(Parser.java:45)
 	at com.google.appengine.tools.development.DevAppServerMain.run(DevAppServerMain.java:257)
 	at com.google.appengine.tools.development.DevAppServerMain.main(DevAppServerMain.java:248)
-Caused by: java.net.BindException: Address already in use: bind
-	at sun.nio.ch.Net.bind0(Native Method)
-	at sun.nio.ch.Net.bind(Net.java:433)
-	at sun.nio.ch.Net.bind(Net.java:425)
-	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:223)
-	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:74)
-	at org.eclipse.jetty.server.ServerConnector.openAcceptChannel(ServerConnector.java:342)
-	... 16 more
+Caused by: java.net.BindException: Address already 2019-12-02 19:19:53.423:INFO:oejs.AbstractConnector:pool-1-thread-1: Stopped NetworkTrafficSelectChannelConnector@520a3426{HTTP/1.1,[http/1.1]}{localhost:8080}
+2019-12-02 19:19:53.426:INFO:oejsh.ContextHandler:pool-1-thread-1: Stopped c.g.a.t.d.j.DevAppEngineWebAppContext@7ae0a9ec{/,file:///C:/Users/Utilizador/AndroidStudioProjects/FinalProject/backend/build/exploded-backend/,UNAVAILABLE}{C:\Users\Utilizador\AndroidStudioProjects\FinalProject\backend\build\exploded-backend}
+dez 02, 2019 7:19:53 PM com.google.appengine.tools.development.AbstractModule shutdown
+INFO: Shutting down module instance default
+Shutting down.
