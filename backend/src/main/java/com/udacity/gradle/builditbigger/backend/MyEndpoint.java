@@ -1,10 +1,10 @@
 package com.udacity.gradle.builditbigger.backend;
 
+import com.example.getjokes.JokeWizard;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
-import javax.inject.Named;
 
 /** An endpoint class we are exposing */
 @Api(
@@ -18,13 +18,12 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
 
-    /** A simple endpoint method that takes a name and says Hi back */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hi, " + name);
-
-        return response;
+    // Method that returns the jokes, in this case the joke example from the java library
+    @ApiMethod(name = "getJokes")
+    public MyJoke getJokes() {
+        MyJoke myJoke = new MyJoke();
+        myJoke.setJoke(new JokeWizard().getJoke());
+        return myJoke;
     }
 
 }

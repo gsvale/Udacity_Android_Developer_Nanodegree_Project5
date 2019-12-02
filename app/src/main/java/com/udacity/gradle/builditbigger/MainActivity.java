@@ -1,34 +1,30 @@
 package com.udacity.gradle.builditbigger;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.AsyncTask;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
-
-import java.io.IOException;
+import com.example.displayjoke.DisplayJokeActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GetTaskResultCallback {
 
-    private static MyApi myApiService = null;
+    private ProgressBar loadingProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // ProgressBar to show loading of joke
+        loadingProgressBar = findViewById(R.id.loading_pb);
     }
 
 
@@ -58,63 +54,21 @@ public class MainActivity extends AppCompatActivity {
     public void tellJoke(View view) {
 
         // Call AsyncTask to retrieve jokes from module
-        new MyApiAsyncTask().execute();
+        new MyApiAsyncTask(this).execute();
+        loadingProgressBar.setVisibility(View.VISIBLE);
 
     }
 
-    public class MyApiAsyncTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    // Function that gets the result from jokes task
+    @Override
+    public void onGetTaskResult(String result) {
+        // Display the joke in an activity from Android Library
+        if (!TextUtils.isEmpty(result)) {
+            Intent intent = new Intent(this, DisplayJokeActivity.class);
+            intent.putExtra(DisplayJokeActivity.JOKE_KEY_TAG, result);
+            startActivity(intent);
         }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            if (myApiService == null) {
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                        new AndroidJsonFactory(), null)
-                        // options for running against local devappserver
-                        // - 10.0.2.2 is localhost's IP address in Android emulator
-                        // - turn off compression when running against local devappserver
-                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                                abstractGoogleClientRequest.setDisableGZipContent(true);
-                            }
-                        });
-                // end options for devappserver
-
-                myApiService = builder.build();
-            }
-
-            String name = "Test";
-
-            try {
-                return myApiService.sayHi(name).execute().getData();
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
-        // Method that display the joke in an activity from Android Library
-        @Override
-        protected void onPostExecute(String result) {
-            displayJoke(result);
-        }
-
+        loadingProgressBar.setVisibility(View.GONE);
     }
-
-    // Method that display the joke in an activity from Android Library
-    private void displayJoke(String joke) {
-
-        Toast.makeText(this, joke, Toast.LENGTH_LONG).show();
-
-//        Intent intent = new Intent(this, DisplayJokeActivity.class);
-//        intent.putExtra(DisplayJokeActivity.JOKE_KEY_TAG, joke);
-//        startActivity(intent);
-    }
-
 
 }

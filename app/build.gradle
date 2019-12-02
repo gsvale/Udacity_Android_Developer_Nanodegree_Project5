@@ -23,7 +23,20 @@ android {
 
         resValue "string", "APP_ID", "ca-app-pub-5646263953158203~3650127282"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions "version"
+
+    productFlavors {
+        free {
+            dimension "version"
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            dimension "version"
+            applicationId "com.udacity.gradle.builditbigger.paid"
+        }
     }
 
     buildTypes {
@@ -37,7 +50,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    freeImplementation 'com.google.android.gms:play-services-ads:18.3.0'
     implementation 'com.google.api-client:google-api-client:1.23.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
@@ -48,6 +61,15 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0'
+
+    // Testing-only dependencies
+    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
 
     implementation project(':getJokes')
     implementation project(':displayJoke')
